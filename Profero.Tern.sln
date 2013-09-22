@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern", "Profero.Tern\Profero.Tern.csproj", "{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{74CB3F64-E19A-4BAA-B7A7-69EB0D210929}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern.UnitTests", "Profero.Tern.UnitTests\Profero.Tern.UnitTests.csproj", "{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern.SqlServer", "Profero.Tern.SqlServer\Profero.Tern.SqlServer.csproj", "{B44A9D29-D97D-4063-84C3-F4995586B39C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern.SqlServer.SystemTests", "Profero.Tern.SqlServer.SystemTests\Profero.Tern.SqlServer.SystemTests.csproj", "{262F4A34-51A1-4406-9A96-0ECC72A8C483}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0ACCC1AD-C991-4968-9710-2B7057A26B9F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B44A9D29-D97D-4063-84C3-F4995586B39C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B44A9D29-D97D-4063-84C3-F4995586B39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B44A9D29-D97D-4063-84C3-F4995586B39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B44A9D29-D97D-4063-84C3-F4995586B39C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262F4A34-51A1-4406-9A96-0ECC72A8C483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262F4A34-51A1-4406-9A96-0ECC72A8C483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262F4A34-51A1-4406-9A96-0ECC72A8C483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262F4A34-51A1-4406-9A96-0ECC72A8C483}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C} = {74CB3F64-E19A-4BAA-B7A7-69EB0D210929}
+		{262F4A34-51A1-4406-9A96-0ECC72A8C483} = {74CB3F64-E19A-4BAA-B7A7-69EB0D210929}
+	EndGlobalSection
+EndGlobal
