@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Profero.Tern.Provider;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -11,17 +13,49 @@ namespace Profero.Tern.SqlServer
 {
     public class SqlServerProvider : IDatabaseProvider
     {
-        public void CreateHeader(TextWriter output)
+        public IDatabaseScriptGenerator CreateGenerator()
+        {
+            return new SqlServerScriptGenerator();
+        }
+    }
+
+    [Export(SqlServerScriptGenerator.Name, typeof(IDatabaseScriptGenerator))]
+    public class SqlServerScriptGenerator : IDatabaseScriptGenerator
+    {
+        public const string Name = "SqlServer2005";
+
+        public void GenerateScriptForInitialization(TextWriter output)
         {
             output.WriteLine("DECLARE @Tern_ConflictingVersion BIGINT");
         }
 
-        public void BeginTransaction(System.IO.TextWriter output)
+        public void GenerateScriptForBeginTransaction(System.IO.TextWriter output)
         {
             output.WriteLine("BEGIN TRANSACTION");
         }
 
-        public void CreateTable(string tableName, System.IO.TextWriter output)
+        public void GenerateScriptForTableExists(string tableName, bool exists, System.IO.TextWriter output)
+        {
+            if (!exists)
+            {
+                output.Write("NOT ");
+            }
+
+            output.WriteLine("EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}')", Escape(tableName));
+        }
+
+        public void GenerateScriptForBeginIf(string script, System.IO.TextWriter output)
+        {
+            output.WriteLine("IF {0}", script);
+            output.WriteLine("BEGIN");
+        }
+
+        public void GenerateScriptForEndIf(System.IO.TextWriter output)
+        {
+            output.WriteLine("END");
+        }
+
+        public void GenerateScriptForVersionTrackingStorage(string tableName, System.IO.TextWriter output)
         {
             output.WriteLine("IF NOT EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}')", Escape(tableName));
             output.WriteLine("BEGIN");
@@ -40,34 +74,29 @@ namespace Profero.Tern.SqlServer
             output.WriteLine("END");
         }
 
-        void CreateColumn(DataColumn column, TextWriter output)
-        {
-            output.Write("[{0}] {1} {2}",
-                column.ColumnName,
-                GetSqlType(column),
-                column.AllowDBNull ? "NULL" : "NOT NULL");
-        }
-
-        private string GetSqlType(DataColumn column)
-        {
-            if (column.DataType == typeof(String))
-            {
-                return column.MaxLength == Int32.MaxValue
-                    ? "NTEXT"
-                    : "NVARCHAR(" + column.MaxLength + ")";
-            }
-
-            if (column.DataType == typeof(DateTime))
-            {
-                return "DATETIME";
-            }
-
-            throw new NotSupportedException(column.DataType.FullName);
-        }
-
-        public void CommitTransaction(System.IO.TextWriter output)
+        public void GenerateScriptForCommitTransaction(System.IO.TextWriter output)
         {
             output.WriteLine("COMMIT TRANSACTION");
+        }
+
+        public void GenerateScriptForNewerVersionQuery(string tableName, string schema, long version, TextWriter output)
+        {
+            output.Write("SELECT [Version] FROM [{0}] WHERE [Schema] = '{1}' AND [NumericVersion] > {3}",
+                tableName, Escape(schema), version);
+        }
+
+        public void GenerateScriptForVersionQuery(string tableName, string schema, string version, TextWriter output)
+        {
+            output.Write("SELECT [Version] FROM [{0}] WHERE [Schema] = '{1}' AND [NumericVersion] > {3}",
+                tableName, Escape(schema), Escape(version));
+        }
+
+        public void GenerateScriptForRaiseError(string message, object[] parameters, TextWriter output)
+        {
+            string formattedMessage = String.Format(message, parameters.Select(x => "%s"));
+
+            output.WriteLine("RAISERROR (N'{0}', 15, 0, N'{1}')",
+                formattedMessage, String.Join("', N'", parameters.Select(x => Escape(x.ToString()))));
         }
 
         public void MigrateVersion(Migrate.MigrationVersion version, System.IO.TextWriter output, Migrate.ScriptGenerationOptions options)

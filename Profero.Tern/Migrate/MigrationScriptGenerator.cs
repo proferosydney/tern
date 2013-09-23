@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Profero.Tern.Provider;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -12,20 +13,20 @@ namespace Profero.Tern.Migrate
 {
     public class MigrationScriptGenerator
     {
-        public void Generate(IEnumerable<MigrationVersion> versions, IDatabaseProvider provider, TextWriter output, ScriptGenerationOptions options)
+        public void Generate(IEnumerable<MigrationVersion> versions, IDatabaseScriptGenerator provider, TextWriter output, ScriptGenerationOptions options)
         {
-            provider.CreateHeader(output);
+            provider.GenerateScriptForInitialization(output);
 
             if (options.UseTransaction)
             {
-                provider.BeginTransaction(output);
+                provider.GenerateScriptForBeginTransaction(output);
             }
 
             var versionTable = CreateVersionTable(options.VersionTableName);
 
             if (options.TrackVersions)
             {
-                provider.CreateTable(options.VersionTableName, output);
+                provider.GenerateScriptForVersionTrackingStorage(options.VersionTableName, output);
             }
 
             var allVersions = GetTernMigrationVersions().Concat(versions);
@@ -41,7 +42,7 @@ namespace Profero.Tern.Migrate
 
             if (options.UseTransaction)
             {
-                provider.CommitTransaction(output);
+                provider.GenerateScriptForCommitTransaction(output);
             }
         }
 

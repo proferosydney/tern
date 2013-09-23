@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}</ProjectGuid>
+    <ProjectGuid>{77ED261E-0F07-42AC-BB94-DCDAC66688AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Profero.Tern</RootNamespace>
-    <AssemblyName>Profero.Tern</AssemblyName>
+    <RootNamespace>Profero.Tern.MSBuild</RootNamespace>
+    <AssemblyName>Profero.Tern.MSBuild</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Engine" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -41,16 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Provider\DatabaseProviderFactory.cs" />
-    <Compile Include="Provider\IDatabaseProvider.cs" />
-    <Compile Include="Provider\IDatabaseScriptGenerator.cs" />
-    <Compile Include="Migrate\IVersionStrategy.cs" />
-    <Compile Include="Migrate\MigrationScriptGenerator.cs" />
+    <Compile Include="GenerateMigrationScriptTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextReaderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MigrationScripts\" />
+    <ProjectReference Include="..\Profero.Tern\Profero.Tern.csproj">
+      <Project>{6c7720c7-9be9-42e8-8171-c6d50289a6ee}</Project>
+      <Name>Profero.Tern</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

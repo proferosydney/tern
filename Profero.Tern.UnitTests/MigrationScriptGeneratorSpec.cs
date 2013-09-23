@@ -1,6 +1,7 @@
 ﻿using Machine.Fakes;
 using Machine.Specifications;
 using Profero.Tern.Migrate;
+using Profero.Tern.Provider;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -63,7 +64,7 @@ namespace Profero.Tern.UnitTests
             protected static IEnumerable<MigrationVersion> versions;
             protected static MigrationScriptGenerator generator;
             protected static TextWriter output;
-            protected static IDatabaseProvider databaseProvider;
+            protected static IDatabaseScriptGenerator databaseProvider;
             protected static ScriptGenerationOptions options;
             protected static string result;
 
@@ -73,22 +74,22 @@ namespace Profero.Tern.UnitTests
 
                 output = new StringWriter();
 
-                databaseProvider = An<IDatabaseProvider>();
+                databaseProvider = An<IDatabaseScriptGenerator>();
 
                 options = new ScriptGenerationOptions();
 
-                databaseProvider.WhenToldTo(p => p.CreateTable(
+                databaseProvider.WhenToldTo(p => p.GenerateScriptForVersionTrackingStorage(
                     options.VersionTableName,
                     output)
                     )
                     .Callback<string, TextWriter>((dt, tw) => tw.WriteLine("CreateTable"));
 
-                databaseProvider.WhenToldTo(p => p.BeginTransaction(
+                databaseProvider.WhenToldTo(p => p.GenerateScriptForBeginTransaction(
                     output)
                     )
                     .Callback<TextWriter>((tw) => tw.WriteLine("BeginTransaction"));
 
-                databaseProvider.WhenToldTo(p => p.CommitTransaction(
+                databaseProvider.WhenToldTo(p => p.GenerateScriptForCommitTransaction(
                     output)
                     )
                     .Callback<TextWriter>((tw) => tw.WriteLine("CommitTransaction"));

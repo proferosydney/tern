@@ -1,4 +1,5 @@
 ﻿using Profero.Tern.Migrate;
+using Profero.Tern.Provider;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -27,7 +28,7 @@ namespace Profero.Tern.SqlServer.SystemTests.Bindings
             this.connection = CreateConnection();
         }
 
-        public IDatabaseProvider DatabaseProvider { get { return new SqlServerProvider(); } }
+        public IDatabaseScriptGenerator DatabaseProvider { get { return new SqlServerScriptGenerator(); } }
 
         public List<Tern.Migrate.MigrationVersion> Versions { get; set; }
 
