@@ -95,11 +95,23 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I apply all the version scripts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Table"});
+                        "Table",
+                        "Column"});
             table2.AddRow(new string[] {
-                        "DatabaseVersion"});
+                        "Test",
+                        "ID"});
+            table2.AddRow(new string[] {
+                        "Test",
+                        "Name"});
 #line 14
- testRunner.Then("the database should not contain", ((string)(null)), table2, "Then ");
+ testRunner.Then("the database should contain", ((string)(null)), table2, "Then ");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Table"});
+            table3.AddRow(new string[] {
+                        "DatabaseVersion"});
+#line 18
+ testRunner.But("the database should not contain", ((string)(null)), table3, "But ");
 #line hidden
             this.ScenarioCleanup();
         }

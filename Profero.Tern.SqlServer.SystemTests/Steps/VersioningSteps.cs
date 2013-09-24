@@ -96,11 +96,9 @@ namespace Profero.Tern.SqlServer.SystemTests.Steps
         [When(@"I apply all the version scripts again")]
         public void WhenIApplyAllTheVersionScripts()
         {
-            MigrationScriptGenerator generator = new MigrationScriptGenerator();
-
             StringWriter writer = new StringWriter();
 
-            generator.Generate(dataContext.Versions, dataContext.DatabaseProvider, writer, dataContext.Options);
+            dataContext.DatabaseProvider.Generate(dataContext.Versions, writer, dataContext.Options);
 
             dataContext.ExecuteNonQuery(writer.ToString());
         }

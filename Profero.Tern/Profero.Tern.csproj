@@ -41,12 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrate\MigrationScriptGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Provider\DatabaseProviderFactory.cs" />
     <Compile Include="Provider\IDatabaseProvider.cs" />
     <Compile Include="Provider\IDatabaseScriptGenerator.cs" />
     <Compile Include="Migrate\IVersionStrategy.cs" />
-    <Compile Include="Migrate\MigrationScriptGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider\SqlProvider.cs" />
     <Compile Include="TextReaderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

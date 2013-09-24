@@ -11,6 +11,10 @@ Scenario: Tracking information should not be stored when tracking is disabled
 	| default | 1.5     | ALTER TABLE [Test] ADD [Name] VARCHAR(32) NULL |
 	But I have disabled tracking
 	When I apply all the version scripts
-	Then the database should not contain
+	Then the database should contain
+	| Table | Column |
+	| Test  | ID     |
+	| Test  | Name   |
+	But the database should not contain
 	| Table           |
 	| DatabaseVersion |

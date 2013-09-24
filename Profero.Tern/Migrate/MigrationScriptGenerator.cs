@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Profero.Tern.Migrate
 {
+    /*
     public class MigrationScriptGenerator
     {
         public void Generate(IEnumerable<MigrationVersion> versions, IDatabaseScriptGenerator provider, TextWriter output, ScriptGenerationOptions options)
@@ -65,7 +66,7 @@ namespace Profero.Tern.Migrate
 
             return table;
         }
-    }
+    }*/
 
     public class ScriptGenerationOptions
     {

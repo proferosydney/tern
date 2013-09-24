@@ -10,14 +10,19 @@ using System.Text;
 
 namespace Profero.Tern.MSBuild
 {
-    public class GenerateMigrationScriptTask : Task
+    /// <summary>
+    /// Generates a migration script from <see cref="M:Versions"/> into <see cref="O:Output"/>
+    /// </summary>
+    public class GenerateMigrationScript : Task
     {
-        public GenerateMigrationScriptTask()
+        public GenerateMigrationScript()
         {
             MigrationScriptOptions = new MigrationScriptOptions();
             ScriptGenerationOptions = new ScriptGenerationOptions();
         }
 
+        /// <summary>Gets or sets the version items</summary>
+        /// <remarks>Each item should be a .sql file</remarks>
         [Required]
         public ITaskItem[] Versions { get; set; }
 
@@ -48,14 +53,14 @@ namespace Profero.Tern.MSBuild
 
             var migrationVersions = GetMigrationVersions(Versions);
 
-            MigrationScriptGenerator scriptGenerator = new MigrationScriptGenerator();
+            
 
             string outputPath = Output.GetMetadata("FullPath");
             
             try
             {
                 using (TextWriter writer = File.CreateText(outputPath))
-                    scriptGenerator.Generate(migrationVersions, databaseProvider, writer, ScriptGenerationOptions);
+                    databaseProvider.Generate(migrationVersions, writer, ScriptGenerationOptions);
 
                 return true;
             }

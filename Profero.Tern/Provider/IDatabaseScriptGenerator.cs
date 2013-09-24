@@ -11,14 +11,6 @@ namespace Profero.Tern.Provider
 {
     public interface IDatabaseScriptGenerator
     {
-        void GenerateScriptForInitialization(System.IO.TextWriter output);
-
-        void GenerateScriptForBeginTransaction(System.IO.TextWriter output);
-
-        void GenerateScriptForVersionTrackingStorage(string tableName, TextWriter output);
-
-        void GenerateScriptForCommitTransaction(System.IO.TextWriter output);
-
-        void MigrateVersion(MigrationVersion version, TextWriter output, ScriptGenerationOptions options);
+        void Generate(IEnumerable<MigrationVersion> versions, TextWriter output, ScriptGenerationOptions options);
     }
 }
