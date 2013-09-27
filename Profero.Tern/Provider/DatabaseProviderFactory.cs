@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Profero.Tern.Provider
@@ -22,7 +24,8 @@ namespace Profero.Tern.Provider
 
         static ComposablePartCatalog GetDefaultCatalog()
         {
-            return new DirectoryCatalog("");
+            string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return new DirectoryCatalog(assemblyDirectory);
         }
 
         internal static T Create<T>(string name, ExportProvider exportProvider)

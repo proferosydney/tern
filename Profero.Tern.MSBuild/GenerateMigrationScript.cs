@@ -5,8 +5,6 @@ using Profero.Tern.Provider;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Profero.Tern.MSBuild
 {
@@ -26,18 +24,17 @@ namespace Profero.Tern.MSBuild
         [Required]
         public ITaskItem[] Versions { get; set; }
 
-        public VersioningStyle VersioningStyle
+        public string VersioningStyle
         {
-            get { return MigrationScriptOptions.VersioningStyle; }
-            set { MigrationScriptOptions.VersioningStyle = value; }
+            get { return MigrationScriptOptions.VersioningStyle.ToString(); }
+            set { MigrationScriptOptions.VersioningStyle = (VersioningStyle)Enum.Parse(typeof(VersioningStyle), value); }
         }
 
-        [Required]
         public MigrationScriptOptions MigrationScriptOptions { get; private set; }
 
-        [Required]
         public ScriptGenerationOptions ScriptGenerationOptions { get; private set; }
 
+        [Required]
         public string DatabaseProvider { get; set; }
 
         public ITaskItem Output { get; set; }
@@ -45,7 +42,6 @@ namespace Profero.Tern.MSBuild
         public override bool Execute()
         {
             IDatabaseScriptGenerator databaseProvider;
-
             if (!TryGetDatabaseProvider(DatabaseProvider, out databaseProvider))
             {
                 return false;

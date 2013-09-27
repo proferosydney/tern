@@ -50,7 +50,7 @@ namespace Profero.Tern.UnitTests.Provider
             {
                 options.UseTransaction = false;
             };
-
+                
             It should_not_begin_a_transaction = () =>
                 result.ShouldNotContain("BeginTransaction");
 

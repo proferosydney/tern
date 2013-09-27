@@ -19,7 +19,7 @@ namespace Profero.Tern.SqlServer
         }
     }
 
-    [Export(SqlServerScriptGenerator.Name, typeof(IDatabaseScriptGenerator))]
+    [Export(Name, typeof(IDatabaseScriptGenerator))]
     public class SqlServerScriptGenerator : SqlScriptGenerator
     {
         public const string Name = "SqlServer2005";

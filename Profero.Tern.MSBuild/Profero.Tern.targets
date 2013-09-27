@@ -1,1 +1,69 @@
-﻿
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="FindMigrationVersions" AssemblyFile="Profero.Tern.MSBuild.dll" />
+  <UsingTask TaskName="GenerateMigrationScript" AssemblyFile="Profero.Tern.MSBuild.dll" />
+  
+  <PropertyGroup>
+    <GenerateMigrationScriptOnBuild Condition="'$(GenerateMigrationScriptOnBuild)' == ''">True</GenerateMigrationScriptOnBuild>
+    <MigrationScriptPath Condition="'$(MigrationScriptPath)' == ''">$(SolutionDir)Database</MigrationScriptPath>
+    <OneScriptPerSchema Condition="'$(OneScriptPerSchema)' == ''">True</OneScriptPerSchema>
+    <MigrationScriptOutputPath Condition="'$(MigrationScriptOutputPath)' == ''">$(IntermediateOutputPath)</MigrationScriptOutputPath>
+    <MigrationDatabaseProvider Condition="'$(MigrationDatabaseProvider)' == ''">SqlServer2005</MigrationDatabaseProvider>
+    <MigrationScriptVersioningStyle Condition="'$(MigrationScriptVersioningStyle)' == ''">Date</MigrationScriptVersioningStyle>
+    <MigrationMsDeployProvider Condition="'$(MigrationMsDeployProvider)' == ''">dbFullSql</MigrationMsDeployProvider>
+  </PropertyGroup>
+  
+  <Target Name="IdentifyMigrationSchemas">
+    <ItemGroup>
+      <DatabaseSchemaDirectories Include="$([System.IO.Directory]::GetDirectories(&quot;$(MigrationScriptPath)&quot;))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="IdentifyMigrationScripts" DependsOnTargets="IdentifyMigrationSchemas">
+    <FindMigrationVersions Directories="@(DatabaseSchemaDirectories)"
+                           VersioningStyle="$(MigrationScriptVersioningStyle)">
+      <Output TaskParameter="ScriptItems" ItemName="DatabaseMigrationVersions"/>
+    </FindMigrationVersions>
+  </Target>
+
+  <Target Name="GenerateMigrationScripts"
+          DependsOnTargets="IdentifyMigrationScripts"
+          Inputs="@(DatabaseMigrationVersions)"
+          Outputs="$(MigrationScriptOutputPath)%(Schema)-migrate.sql">
+
+    <GenerateMigrationScript Versions="@(DatabaseMigrationVersions)"
+                             VersioningStyle="$(MigrationScriptVersioningStyle)"
+                             DatabaseProvider="$(MigrationDatabaseProvider)"
+                             Output="$(MigrationScriptOutputPath)%(Schema)-migrate.sql" />
+    
+  </Target>
+
+  <PropertyGroup Condition="$(GenerateMigrationScriptOnBuild)">
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      IdentifyMigrationScripts;
+      GenerateMigrationScripts
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="AddMigrationScriptsToSourceManifest" DependsOnTargets="IdentifyMigrationSchemas">
+    <PropertyGroup>
+      <_MigrationScriptOutputFullPath>$([System.IO.Path]::GetFullPath($(MigrationScriptOutputPath)))</_MigrationScriptOutputFullPath>
+    </PropertyGroup>
+    
+    <ItemGroup Condition="'@(DatabaseSchemaDirectories)' != ''">
+      <MsDeploySourceManifest Include="dbFullSql">
+        <Path>$(_MigrationScriptOutputFullPath)%(DatabaseSchemaDirectories.Filename)-migrate.sql</Path>
+      </MsDeploySourceManifest>
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup>
+    <WriteItemsToSourceManifestDependsOn>
+      $(WriteItemsToSourceManifestDependsOn);
+      AddMigrationScriptsToSourceManifest;
+    </WriteItemsToSourceManifestDependsOn>
+  </PropertyGroup>
+  
+</Project>

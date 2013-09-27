@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FindMigrationVersions.cs" />
     <Compile Include="GenerateMigrationScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

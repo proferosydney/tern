@@ -29,6 +29,8 @@ namespace Profero.Tern.UnitTests
             static VersionVersionStrategy sut;
         }
 
+
+
         [Subject(typeof(VersionVersionStrategy))]
         class When_comparing_versions_with_different_part_counts
         {

@@ -223,14 +223,14 @@ namespace Profero.Tern.Migrate
     {
         public bool CanCreate(string filename, MigrationScriptOptions options)
         {
-            return options.VersionFilenamePattern.IsMatch(filename);
+            return options.VersionFilenamePattern.IsMatch(Path.GetFileName(filename));
         }
 
         public MigrationVersion Create(TextReader reader, string filename, MigrationScriptOptions options, string defaultSchema = "default")
         {
             options.Validate();
 
-            Match match = options.VersionFilenamePattern.Match(filename);
+            Match match = options.VersionFilenamePattern.Match(Path.GetFileName(filename));
 
             if (!match.Success)
             {

@@ -13,7 +13,7 @@ namespace Profero.Tern.SqlServer.SystemTests.Steps
     [Binding]
     public class VersioningSteps
     {
-        TestDataContext dataContext;
+        readonly TestDataContext dataContext;
 
         public VersioningSteps(TestDataContext dataContext)
         {
