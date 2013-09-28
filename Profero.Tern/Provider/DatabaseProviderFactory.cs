@@ -24,7 +24,11 @@ namespace Profero.Tern.Provider
 
         static ComposablePartCatalog GetDefaultCatalog()
         {
-            string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string codebase = typeof(DatabaseProviderFactory).Assembly.CodeBase;
+
+            string assemblyLocalPath = new Uri(codebase).LocalPath;
+
+            string assemblyDirectory = Path.GetDirectoryName(assemblyLocalPath);
             return new DirectoryCatalog(assemblyDirectory);
         }
 
