@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern", "Profero.Tern\Profero.Tern.csproj", "{6C7720C7-9BE9-42E8-8171-C6D50289A6EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{74CB3F64-E19A-4BAA-B7A7-69EB0D210929}"
+	ProjectSection(SolutionItems) = preProject
+		readme.txt = readme.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern.UnitTests", "Profero.Tern.UnitTests\Profero.Tern.UnitTests.csproj", "{AA2A7C12-77B3-4B2A-BDF4-F19C9AC9569C}"
 EndProject
