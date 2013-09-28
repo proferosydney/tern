@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Profero.Ternkey</id>
+    <version>1.0</version>
+    <authors>profero</authors>
+    <owners>profero</owners>
+    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Ternkey is a database versioning and migration tool that integrates directly in Web Deploy</description>
+    <tags>database deployment migration msdeploy webdeploy</tags>
+    <references />
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\Profero.Tern.dll" target="tools\" />
+    <file src="bin\$configuration$\Profero.Tern.SqlServer.dll" target="tools\" />
+    <file src="Profero.Tern.targets" target="build\Profero.Ternkey.targets" />
+    <file src="1.0-Readme.sql" target="content\Database\default\" />
+  </files>
+</package>

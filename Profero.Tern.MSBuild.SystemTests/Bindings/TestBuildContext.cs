@@ -34,6 +34,8 @@ namespace Profero.Tern.MSBuild.SystemTests.Bindings
 
         public void BuildTestProject(string target)
         {
+            properties["TernToolsPath"] = Environment.CurrentDirectory;
+
             var buildRequestData = new BuildRequestData(TestProjectFilePath,
                 properties, null, new[] { target }, null);
 

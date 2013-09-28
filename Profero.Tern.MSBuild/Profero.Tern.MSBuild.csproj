@@ -28,6 +28,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <BuildPackage>true</BuildPackage>
+    <NuGetExePath>..\packages\NuGet.CommandLine.2.7.1\tools\nuget.exe</NuGetExePath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
@@ -50,15 +52,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Profero.Tern.SqlServer\Profero.Tern.SqlServer.csproj">
+      <Project>{b44a9d29-d97d-4063-84c3-f4995586b39c}</Project>
+      <Name>Profero.Tern.SqlServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Profero.Tern\Profero.Tern.csproj">
       <Project>{6c7720c7-9be9-42e8-8171-c6d50289a6ee}</Project>
       <Name>Profero.Tern</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Install.ps1" />
+    <None Include="Profero.Tern.MSBuild.nuspec" />
     <None Include="Profero.Tern.targets" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="1.0-Readme.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\NuGet.Build.2.7.0\tools\NuGet.targets" Condition="Exists('..\packages\NuGet.Build.2.7.0\tools\NuGet.targets')" />
+  <PropertyGroup>
+    <BuildCommand>$(BuildCommand) -tool -Exclude *.dll</BuildCommand>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

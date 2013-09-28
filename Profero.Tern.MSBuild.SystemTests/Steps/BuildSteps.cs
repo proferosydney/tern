@@ -118,7 +118,17 @@ namespace Profero.Tern.MSBuild.SystemTests.Steps
             FileSystemUtility.CopyDirectory(scriptBackupPath, @"WebProject\Database");
         }
 
-        
+        [Then(@"the package should contain a parameter ""(.*)""")]
+        public void ThenThePackageShouldContainAParameter(string parameterName)
+        {
+            XDocument doc = XDocument.Load(@"WebProject\obj\Debug\Package\TestWebApplication.SetParameters.xml");
+
+            Assert.IsNotNull(doc.Element("parameters")
+                .Elements("setParameter")
+                .Where(e => e.Attribute("name").Value == parameterName)
+                .FirstOrDefault());
+        }
+
 
         
     }
