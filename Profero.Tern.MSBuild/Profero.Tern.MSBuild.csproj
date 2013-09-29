@@ -62,7 +62,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Install.ps1" />
     <None Include="Profero.Tern.MSBuild.nuspec" />
     <None Include="Profero.Tern.targets" />
   </ItemGroup>
