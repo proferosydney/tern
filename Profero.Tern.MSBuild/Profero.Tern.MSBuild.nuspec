@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Profero.Ternkey</id>
-    <version>1.0</version>
+    <version>1.0-alpha1</version>
     <authors>profero</authors>
     <owners>profero</owners>
     <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
