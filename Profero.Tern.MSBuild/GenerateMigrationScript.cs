@@ -9,7 +9,7 @@ using System.IO;
 namespace Profero.Tern.MSBuild
 {
     /// <summary>
-    /// Generates a migration script from <see cref="M:Versions"/> into <see cref="O:Output"/>
+    /// Generates a migration script from <see cref="Versions"/> into <see cref="Output"/>
     /// </summary>
     public class GenerateMigrationScript : Task
     {
@@ -37,6 +37,7 @@ namespace Profero.Tern.MSBuild
         [Required]
         public string DatabaseProvider { get; set; }
 
+        [Required]
         public ITaskItem Output { get; set; }
 
         public override bool Execute()

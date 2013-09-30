@@ -8,6 +8,13 @@ using Profero.Tern.Migrate;
 
 namespace Profero.Tern.MSBuild
 {
+    /// <summary>
+    /// Locates and filters migration version scripts from a list of directories
+    /// </summary>
+    /// <remarks>
+    /// The <see cref="ScriptItems"/> output property will be populated with paths to matching scripts and a "Schema" metadata item 
+    /// that is populated from the parent directory name
+    /// </remarks>
     public class FindMigrationVersions : Task
     {
         public FindMigrationVersions()
