@@ -98,7 +98,7 @@ We welcome bugfixes and ideas around the provider model. In order to run the aut
 1. [SpecFlow Visual Studio Extension](http://visualstudiogallery.msdn.microsoft.com/9915524d-7fb0-43c3-bb3c-a8a14fbd40ee)
 1. [Machine.Specifications Visual Studio Extension](http://visualstudiogallery.msdn.microsoft.com/4abcb54b-53b5-4c44-877f-0397556c5c44)
 
-Just open the solution, build and run the tests using Test Explorer or ReSharper.
+Just clone/fork, open the solution, build and run the tests using Test Explorer or ReSharper.
 
 ### Known Issues
 

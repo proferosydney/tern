@@ -8,6 +8,10 @@
   <UsingTask TaskName="FindMigrationVersions" AssemblyFile="$(TernToolsPath)\Profero.Tern.MSBuild.dll" />
   <UsingTask TaskName="GenerateMigrationScript" AssemblyFile="$(TernToolsPath)\Profero.Tern.MSBuild.dll" />
   
+  <!--
+    Default options
+  -->
+  
   <PropertyGroup>
     <GenerateMigrationScriptOnBuild Condition="'$(GenerateMigrationScriptOnBuild)' == ''">True</GenerateMigrationScriptOnBuild>
     <MigrationScriptPath Condition="'$(MigrationScriptPath)' == ''">$(MSBuildProjectDirectory)\Database</MigrationScriptPath>
@@ -17,13 +21,16 @@
     <MigrationScriptVersioningStyle Condition="'$(MigrationScriptVersioningStyle)' == ''">Version</MigrationScriptVersioningStyle>
     <MigrationMsDeployProvider Condition="'$(MigrationMsDeployProvider)' == ''">dbFullSql</MigrationMsDeployProvider>
   </PropertyGroup>
+
+  <!--
+    Identify Migration Schemas
+  -->
   
   <Target Name="IdentifyMigrationSchemas">
 
     <Warning Condition="!Exists($(MigrationScriptPath))"
              Text="Database migration script folder ($(MigrationScriptPath)) does not exist. Migration scripts will not be generated" />
 
-    
     <ItemGroup Condition="Exists($(MigrationScriptPath))">
       <DatabaseSchemaDirectories Include="$([System.IO.Directory]::GetDirectories(&quot;$(MigrationScriptPath)&quot;))" />
     </ItemGroup>
@@ -35,6 +42,10 @@
       <Output TaskParameter="ScriptItems" ItemName="DatabaseMigrationVersions"/>
     </FindMigrationVersions>
   </Target>
+
+  <!--
+    Generate Migration Scripts
+  -->
 
   <Target Name="GenerateMigrationScripts"
           DependsOnTargets="IdentifyMigrationScripts"
@@ -56,6 +67,10 @@
     </BuildDependsOn>
   </PropertyGroup>
 
+  <!--
+    Add migration scripts to deployment
+  -->
+
   <Target Name="AddMigrationScriptsToSourceManifest" DependsOnTargets="IdentifyMigrationSchemas">
     <PropertyGroup>
       <_MigrationScriptOutputFullPath>$([System.IO.Path]::GetFullPath($(MigrationScriptOutputPath)))</_MigrationScriptOutputFullPath>
@@ -68,12 +83,19 @@
     </ItemGroup>
   </Target>
 
+  <PropertyGroup>
+    <WriteItemsToSourceManifestDependsOn>
+      $(WriteItemsToSourceManifestDependsOn);
+      AddMigrationScriptsToSourceManifest;
+    </WriteItemsToSourceManifestDependsOn>
+  </PropertyGroup>
+
   <Target Name="AddDeclareParametersItemsForDatabaseMigrationScript">
     <ItemGroup Condition="!$(DisableAllVSGeneratedMSDeployParameter)">
       <MsDeployDeclareParameters Include="@(DatabaseSchemaDirectories -> '%(Filename)-Migration Connection String')">
         <Kind>ProviderPath</Kind>
         <Scope>$(MigrationMsDeployProvider)</Scope>
-        <Match>%(Filename)-migrate\.sql$</Match>
+        <Match>%(Filename)-migrate\.sql$</Matc>h
         <Description>$(DeployParameterDatabaseMigrationDescription)</Description>
         <Tags>$(MsDeployDatabaseTag)</Tags>
         <Priority>$(VsSQLDatabaseScriptParametersPriority)</Priority>
@@ -82,10 +104,6 @@
   </Target>
 
   <PropertyGroup>
-    <WriteItemsToSourceManifestDependsOn>
-      $(WriteItemsToSourceManifestDependsOn);
-      AddMigrationScriptsToSourceManifest;
-    </WriteItemsToSourceManifestDependsOn>
     <AddDeclareParametersItemsDependsOn>
       $(AddDeclareParametersItemsDependsOn);
       AddDeclareParametersItemsForDatabaseMigrationScript
