@@ -95,7 +95,7 @@
       <MsDeployDeclareParameters Include="@(DatabaseSchemaDirectories -> '%(Filename)-Migration Connection String')">
         <Kind>ProviderPath</Kind>
         <Scope>$(MigrationMsDeployProvider)</Scope>
-        <Match>%(Filename)-migrate\.sql$</Matc>h
+        <Match>%(Filename)-migrate\.sql$</Match>
         <Description>$(DeployParameterDatabaseMigrationDescription)</Description>
         <Tags>$(MsDeployDatabaseTag)</Tags>
         <Priority>$(VsSQLDatabaseScriptParametersPriority)</Priority>
