@@ -1,21 +1,18 @@
-﻿using Profero.Tern.Migrate;
+﻿using System.IO;
+using Profero.Tern.Migrate;
 using Profero.Tern.Provider;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlServerCe;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace Profero.Tern.SqlServer.SystemTests.Bindings
 {
     public class TestDataContext : IDisposable
     {
-        readonly IDbConnection connection;
+        DbConnection connection;
 
         public TestDataContext()
         {
@@ -23,9 +20,7 @@ namespace Profero.Tern.SqlServer.SystemTests.Bindings
             Options = new Migrate.ScriptGenerationOptions();
 
             AppDomain.CurrentDomain.SetData("DataDirectory",
-                Path.GetTempPath());
-
-            this.connection = CreateConnection();
+                Environment.CurrentDirectory);
         }
 
         public IDatabaseScriptGenerator DatabaseProvider { get { return new SqlServerScriptGenerator(); } }
@@ -67,20 +62,60 @@ namespace Profero.Tern.SqlServer.SystemTests.Bindings
 
         public void CreateDatabase()
         {
-            ExecuteNonQuery("USE master; DROP DATABASE TernTests; CREATE DATABASE TernTests; USE TernTests");
+            if (connection != null)
+            {
+                connection.Dispose();
+            }
+
+            using (connection = CreateMasterConnection())
+            {
+                ExecuteNonQuery(@"IF db_id('TernTests') is not null BEGIN ALTER DATABASE [TernTests] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [TernTests]; END");
+            }
+
+            using (connection = CreateMasterConnection())
+            {
+                string mdfPath = Path.Combine(Environment.CurrentDirectory, "TernTests.mdf");
+                string ldfPath = Path.Combine(Environment.CurrentDirectory, "TernTests_log.ldf");
+
+                ExecuteNonQuery(
+                    String.Format(
+                        "CREATE DATABASE [TernTests] ON PRIMARY (Name = TernTests, FILENAME = '{0}') LOG ON (Name = TernTests_log, FILENAME = '{1}')",
+                        mdfPath, ldfPath));
+            }
+
+            this.connection = CreateConnection();
         }
 
-        private IDbConnection CreateConnection()
+        private DbConnection CreateConnection()
         {
             ConnectionStringSettings connectionString = ConfigurationManager.ConnectionStrings["Tern.TestDb"];
 
             var provider = DbProviderFactories.GetFactory(connectionString.ProviderName);
 
-            var connection = provider.CreateConnection();
+            var conn = provider.CreateConnection();
 
-            connection.ConnectionString = connectionString.ConnectionString;
+            conn.ConnectionString = connectionString.ConnectionString;
 
-            return connection;
+            return conn;
+        }
+
+        private DbConnection CreateMasterConnection()
+        {
+            ConnectionStringSettings connectionString = ConfigurationManager.ConnectionStrings["Tern.TestDb"];
+
+            var provider = DbProviderFactories.GetFactory(connectionString.ProviderName);
+
+            var conn = provider.CreateConnection();
+
+            var builder = provider.CreateConnectionStringBuilder();
+
+            builder.ConnectionString = connectionString.ConnectionString;
+            builder["Database"] = "master";
+            builder.Remove("AttachDbFilename");
+
+            conn.ConnectionString = builder.ConnectionString;
+
+            return conn;
         }
 
         public void Dispose()

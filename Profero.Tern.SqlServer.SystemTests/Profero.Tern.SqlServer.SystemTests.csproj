@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bindings\FileSystemUtility.cs" />
     <Compile Include="Bindings\TestDataContext.cs" />
     <Compile Include="Features\Collisions.feature.cs">
       <DependentUpon>Collisions.feature</DependentUpon>
