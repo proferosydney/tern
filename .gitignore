@@ -32,7 +32,9 @@
 .builds
 *.dotCover
 
+# NuGet
 packages/
+NuGet.exe
 
 # Visual Studio profiler
 *.psess
