@@ -163,7 +163,7 @@ BEGIN
 
         protected virtual void GenerateScriptForVersionTrackingStorage(string tableName, System.IO.TextWriter output)
         {
-            output.WriteLine("DECLARE @Tern_ConflictingVersion BIGINT");
+            output.WriteLine("DECLARE @Tern_ConflictingVersion NVARCHAR(32)");
 
             output.WriteLine("IF NOT EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}')", Escape(tableName));
             output.WriteLine("BEGIN");
