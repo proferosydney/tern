@@ -28,6 +28,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern.MSBuild", "Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profero.Tern.MSBuild.SystemTests", "Profero.Tern.MSBuild.SystemTests\Profero.Tern.MSBuild.SystemTests.csproj", "{FCCC08AE-2943-4E90-B409-31B0DA14F210}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{0B05AA2C-E56E-49C6-BAD4-7AD6200BFD16}"
+	ProjectSection(SolutionItems) = preProject
+		build.proj = build.proj
+		Build\mspec-to-nunit.xslt = Build\mspec-to-nunit.xslt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
