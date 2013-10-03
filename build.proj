@@ -5,7 +5,7 @@
   <!-- AppVeyer -->
   <PropertyGroup>
     <NUnitResults Condition="'$(NUnitResults)' == ''">$(MSBuildThisFileDirectory)</NUnitResults>
-    <TempFolder Condition="'$(TempFolder)' == ''">$(MSBuildThisFileDirectory)</TempFolder>
+    <TempFolder Condition="'$(TempFolder)' == ''">$(OutDir)</TempFolder>
 
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
   </PropertyGroup>
