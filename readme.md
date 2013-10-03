@@ -80,7 +80,7 @@ Continuity Safeguards
 The generated scripts attempt
 
 1. Ensure deployed script content has not changed by comparing it to a computed hash
-1. Ensure intermediate versions (eg. 1.0, 2.0, 1.5) have been added after deployment
+1. Ensure intermediate versions (eg. 1.0, 2.0, 1.5) have not been added after deployment
 
 Untracked Databases
 ----
