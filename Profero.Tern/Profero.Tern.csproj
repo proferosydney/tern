@@ -48,6 +48,9 @@
     <Compile Include="Provider\IDatabaseProvider.cs" />
     <Compile Include="Provider\IDatabaseScriptGenerator.cs" />
     <Compile Include="Migrate\IVersionStrategy.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\SqlProvider.cs" />
     <Compile Include="TextReaderExtensions.cs" />
