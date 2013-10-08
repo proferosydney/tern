@@ -6,7 +6,7 @@ _Tern_ is a relational database migration library for .NET which generates migra
 - Are idempotent (you can run them multiple times on the same database)
 - Validate the continuity of the migration (like rejecting scripts that have been changed after being deployed)
 
-_Ternkey_ is builds on _Tern_ and adds turnkey (eh?) integration into Web Deploy.
+_Ternkey_ builds on _Tern_ and adds turnkey (eh?) integration into Web Deploy.
 
 Installation
 ----
