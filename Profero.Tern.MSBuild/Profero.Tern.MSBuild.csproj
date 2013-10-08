@@ -69,10 +69,14 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Profero.Tern.MSBuild.nuspec" />
-    <None Include="Profero.Tern.targets" />
+    <None Include="Profero.Tern.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="1.0-Readme.sql" />
+    <None Include="1.0-Readme.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--<Import Project="..\packages\NuGet.Build.2.7.0\tools\NuGet.targets" Condition="Exists('..\packages\NuGet.Build.2.7.0\tools\NuGet.targets')" />
@@ -80,11 +84,9 @@
     <BuildCommand>$(BuildCommand) -tool -Exclude *.dll</BuildCommand>
   </PropertyGroup>-->
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-
   <PropertyGroup>
-    <BuildCommand>$(NuGetCommand) pack "$(ProjectPath)" -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -Tool -MinClientVersion 2.7 -NoPackageAnalysis</BuildCommand>
+    <BuildCommand>$(NuGetCommand) pack "$(ProjectDir)$(ProjectName).nuspec" -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -Tool -MinClientVersion 2.7 -NoPackageAnalysis -BasePath "$(OutDir.TrimEnd('\\'))"</BuildCommand>
   </PropertyGroup>
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

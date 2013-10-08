@@ -13,8 +13,8 @@
     <references />
   </metadata>
   <files>
-    <file src="bin\$configuration$\Profero.Tern.dll" target="tools\" />
-    <file src="bin\$configuration$\Profero.Tern.SqlServer.dll" target="tools\" />
+    <file src="Profero.Tern.dll" target="tools\" />
+    <file src="Profero.Tern.SqlServer.dll" target="tools\" />
     <file src="Profero.Tern.targets" target="build\Profero.Ternkey.targets" />
     <file src="1.0-Readme.sql" target="content\Database\default\" />
   </files>
