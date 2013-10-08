@@ -12,14 +12,16 @@
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 
     <OutDir Condition="'$(OutDir)' == ''">bin\$(Configuration)</OutDir>
+
+    <GenerateProjectSpecificOutputFolder Condition="'$(GenerateProjectSpecificOutputFolder)' == ''">true</GenerateProjectSpecificOutputFolder>
   </PropertyGroup>
 
   <Target Name="Clean">
-    <MSBuild Projects="Profero.Tern.sln" Targets="Clean" Properties="Configuration=$(Configuration);OutDir=$(OutDir)" />
+    <MSBuild Projects="Profero.Tern.sln" Targets="Clean" Properties="Configuration=$(Configuration);OutDir=$(OutDir);GenerateProjectSpecificOutputFolder=$(GenerateProjectSpecificOutputFolder)" />
   </Target>
 
   <Target Name="Build">
-    <MSBuild Projects="Profero.Tern.sln" Properties="Configuration=$(Configuration);OutDir=$(OutDir)" />
+    <MSBuild Projects="Profero.Tern.sln" Properties="Configuration=$(Configuration);OutDir=$(OutDir);GenerateProjectSpecificOutputFolder=$(GenerateProjectSpecificOutputFolder)" />
   </Target>
 
   <Target Name="RunSystemTests">
@@ -33,7 +35,7 @@
       <SystemTestProjects Include="Profero.Tern.SqlServer.SystemTests\Profero.Tern.SqlServer.SystemTests.csproj" />
     </ItemGroup>
 
-    <Exec Command="$(NUnitRunnerPath) /framework=4.0 &quot;/xml=$(TempFolder)%(SystemTestProjects.Filename).xml&quot; &quot;$(OutDir)\%(SystemTestProjects.Filename).dll&quot;"
+    <Exec Command="$(NUnitRunnerPath) /framework=4.0 &quot;/xml=$(TempFolder)%(SystemTestProjects.Filename).xml&quot; &quot;$(OutDir)\%(SystemTestProjects.Filename)\%(SystemTestProjects.Filename).dll&quot;"
           WorkingDirectory="%(SystemTestProjects.RootDir)%(SystemTestProjects.Directory)"
           Condition="'@(SystemTestProjects)' != ''"
           IgnoreExitCode="true"/>
@@ -49,7 +51,7 @@
       <UnitTestProjects Include="Profero.Tern.UnitTests\Profero.Tern.UnitTests.csproj" />
     </ItemGroup>
 
-    <Exec Command="$(MSpecRunnerPath) --xml &quot;$(TempFolder)%(UnitTestProjects.Filename)-mspec.xml&quot; &quot;$(OutDir)\%(UnitTestProjects.Filename).dll&quot;" 
+    <Exec Command="$(MSpecRunnerPath) --xml &quot;$(TempFolder)%(UnitTestProjects.Filename)-mspec.xml&quot; &quot;$(OutDir)\%(UnitTestProjects.Filename)\%(UnitTestProjects.Filename).dll&quot;" 
           WorkingDirectory="%(UnitTestProjects.RootDir)%(UnitTestProjects.Directory)"
           Condition="'@(UnitTestProjects)' != ''"
           IgnoreExitCode="true"/>
