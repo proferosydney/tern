@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetExePath>$(SolutionDir)packages\NuGet.CommandLine.2.7.1\tools\NuGet.exe</NuGetExePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <BuildPackage>false</BuildPackage>
+    <BuildPackage>true</BuildPackage>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
@@ -79,6 +80,11 @@
     <BuildCommand>$(BuildCommand) -tool -Exclude *.dll</BuildCommand>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+
+  <PropertyGroup>
+    <BuildCommand>$(NuGetCommand) pack "$(ProjectPath)" -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -Tool -MinClientVersion 2.7 -NoPackageAnalysis</BuildCommand>
+  </PropertyGroup>
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
