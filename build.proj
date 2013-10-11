@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Clean;Build;Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+
+  <PropertyGroup>
+    <Version Condition="'$(Version)' == ''">1.0.0</Version>
+    <IsSnapshotBuild Condition="'$(IsSnapshotBuild)' == '' and '$(VersionSuffix)' == ''">true</IsSnapshotBuild>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(IsSnapshotBuild)' == 'true'">-SNAPSHOT-$([System.DateTime]::Now.ToString("yyyyMMdd"))</VersionSuffix>
+    <PackageVersion Condition="'$(PackageVersion)' == ''">$(Version)$(VersionSuffix)</PackageVersion>
+  </PropertyGroup>
   
   <!-- AppVeyer -->
   <PropertyGroup>
@@ -17,11 +24,40 @@
   </PropertyGroup>
 
   <Target Name="Clean">
-    <MSBuild Projects="Profero.Tern.sln" Targets="Clean" Properties="Configuration=$(Configuration);OutDir=$(OutDir);GenerateProjectSpecificOutputFolder=$(GenerateProjectSpecificOutputFolder)" />
+    <MSBuild Projects="Profero.Tern.sln" Targets="Clean" Properties="Configuration=$(Configuration);OutDir=$(OutDir);GenerateProjectSpecificOutputFolder=$(GenerateProjectSpecificOutputFolder);PackageVersion=$(Version)$(VersionSuffix)" />
   </Target>
 
-  <Target Name="Build">
-    <MSBuild Projects="Profero.Tern.sln" Properties="Configuration=$(Configuration);OutDir=$(OutDir);GenerateProjectSpecificOutputFolder=$(GenerateProjectSpecificOutputFolder)" />
+  <Target Name="Build" DependsOnTargets="UpdateAssemblyInfo">
+    <MSBuild Projects="Profero.Tern.sln" Properties="Configuration=$(Configuration);OutDir=$(OutDir);GenerateProjectSpecificOutputFolder=$(GenerateProjectSpecificOutputFolder);PackageVersion=$(Version)$(VersionSuffix)" />
+    <CallTarget Targets="RollbackAssemblyInfo" />
+    <OnError ExecuteTargets="RollbackAssemblyInfo"/>
+  </Target>
+
+  <Target Name="UpdateAssemblyInfo">
+
+    <ReadLinesFromFile File="CommonAssemblyInfo.cs">
+      <Output ItemName="CommonAssemblyInfoLines" TaskParameter="Lines"/>
+    </ReadLinesFromFile>
+
+    <PropertyGroup>
+      <AssemblyVersionAttribute>[assembly: AssemblyVersion("$(Version)")]</AssemblyVersionAttribute>
+      <AssemblyFileVersionAttribute>[assembly: AssemblyFileVersion("$(Version)")]</AssemblyFileVersionAttribute>
+      <AssemblyInformationalVersionAttribute Condition="'$(VersionSuffix)' != ''">[assembly: AssemblyInformationalVersion("$(Version)$(VersionSuffix))")]</AssemblyInformationalVersionAttribute>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <_RewrittenCommonAssemblyInfoLines Include="@(CommonAssemblyInfoLines)" Condition="$([System.String]::new('%(Identity)').IndexOf('Version')) == -1" />
+      <_RewrittenCommonAssemblyInfoLines Include="$(AssemblyVersionAttribute)" />
+      <_RewrittenCommonAssemblyInfoLines Include="$(AssemblyFileVersionAttribute)" />
+      <_RewrittenCommonAssemblyInfoLines Include="$(AssemblyInformationalVersionAttribute)" Condition="'$(AssemblyInformationalVersionAttribute)' != ''" />
+    </ItemGroup>
+
+    <WriteLinesToFile Lines="@(_RewrittenCommonAssemblyInfoLines)" File="CommonAssemblyInfo.cs" Overwrite="true" />
+    
+  </Target>
+  
+  <Target Name="RollbackAssemblyInfo">
+    <WriteLinesToFile Lines="@(CommonAssemblyInfoLines)" File="CommonAssemblyInfo.cs" Overwrite="true" />
   </Target>
 
   <Target Name="RunSystemTests">
@@ -64,5 +100,15 @@
   
   <Target Name="Test" DependsOnTargets="Build;RunUnitTests;RunSystemTests">
     
+  </Target>
+
+  <Target Name="Publish">
+
+    <Error Condition="'$(NuGetApiKey)' == ''"
+           Text="NuGetApiKey must be supplied"/>
+    
+    <PropertyGroup>
+      <PublishCommand>.nuget\nuget.exe $(OutDir)Profero.Tern.MSBuild\Profero.Ternkey.$(PackageVersion).nupkg $(NuGetApiKey) -NonInteractive</PublishCommand>
+    </PropertyGroup>
   </Target>
 </Project>

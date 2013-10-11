@@ -86,6 +86,7 @@
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <BuildCommand>$(NuGetCommand) pack "$(ProjectDir)$(ProjectName).nuspec" -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -Tool -MinClientVersion 2.7 -NoPackageAnalysis -BasePath "$(OutDir.TrimEnd('\\'))"</BuildCommand>
+    <BuildCommand Condition="'$(PackageVersion)' != ''">$(BuildCommand) -Version $(PackageVersion)</BuildCommand>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

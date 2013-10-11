@@ -2,9 +2,10 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Profero.Ternkey</id>
-    <version>1.0.0-alpha1</version>
-    <authors>profero</authors>
-    <owners>profero</owners>
+    <title>Ternkey</title>
+    <version>1.0.0</version>
+    <authors>proferosydney</authors>
+    <owners>proferosydney</owners>
     <licenseUrl>http://github.com/proferosydney/tern/blob/master/LICENSE</licenseUrl>
     <projectUrl>http://github.com/proferosydney/tern</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
