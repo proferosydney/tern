@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Data.SqlClient;
+using System.IO;
 using Profero.Tern.Migrate;
 using Profero.Tern.Provider;
 using System;
@@ -67,14 +68,24 @@ namespace Profero.Tern.SqlServer.SystemTests.Bindings
                 connection.Dispose();
             }
 
+            string mdfPath = Path.Combine(Environment.CurrentDirectory, "TernTests.mdf");
+
             using (connection = CreateMasterConnection())
             {
-                ExecuteNonQuery(@"IF db_id('TernTests') is not null BEGIN ALTER DATABASE [TernTests] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [TernTests]; END");
+                try
+                {
+                    ExecuteNonQuery(
+                        @"IF db_id('TernTests') is not null BEGIN ALTER DATABASE [TernTests] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [TernTests]; END");
+                }
+                catch (SqlException)
+                {
+                    ExecuteNonQuery(
+                        @"IF db_id('TernTests') is not null BEGIN DROP DATABASE [TernTests]; END");
+                }
             }
 
             using (connection = CreateMasterConnection())
             {
-                string mdfPath = Path.Combine(Environment.CurrentDirectory, "TernTests.mdf");
                 string ldfPath = Path.Combine(Environment.CurrentDirectory, "TernTests_log.ldf");
 
                 ExecuteNonQuery(
